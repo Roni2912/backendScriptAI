@@ -4,6 +4,16 @@ const jwt = require('jsonwebtoken');
 exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
+
+    if(!username || !email || !password){
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
     const user = new User({ username, email, password });
     await user.save();
     
@@ -17,6 +27,11 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+    
     const user = await User.findOne({ email });
     
     if (!user || !(await user.comparePassword(password))) {
