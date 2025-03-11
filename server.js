@@ -26,6 +26,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/scripts', scriptRoutes);
 app.use('/api/ai', aiRoutes);
 
+app.get('/', (req, res) => {
+  res.send("API is running successfully 🚀");
+});
+
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
